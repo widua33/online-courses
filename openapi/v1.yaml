@@ -1,0 +1,166 @@
+---
+openapi: 3.0.1
+info:
+  title: API V1
+  version: v1
+paths:
+  "/api/v1/authors":
+    get:
+      summary: Список авторов
+      responses:
+        '200':
+          description: Список авторов получен
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  authors:
+                    type: array
+                    items:
+                      "$ref": "#/components/schemas/author"
+    post:
+      summary: Создать автора
+      parameters: []
+      responses:
+        '201':
+          description: Автор создан
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/author"
+        '400':
+          description: Cервер не может обработать запрос
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/bad_request_error"
+        '422':
+          description: При обработке данных произошла ошибка
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/unprocessable_entity_error"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - first_name
+              - last_name
+              properties:
+                first_name:
+                  type: string
+                last_name:
+                  type: string
+  "/api/v1/authors/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: id
+      required: true
+      schema:
+        type: string
+    get:
+      summary: Получить автора
+      responses:
+        '200':
+          description: Автор получен
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/author"
+        '404':
+          description: Автор не найден
+    put:
+      summary: Обновить автора
+      parameters: []
+      responses:
+        '200':
+          description: Автор обновлен
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/author"
+        '400':
+          description: Cервер не может обработать запрос
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/bad_request_error"
+        '404':
+          description: Автор не найден
+        '422':
+          description: При обработке данных произошла ошибка
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/unprocessable_entity_error"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - first_name
+              - last_name
+              properties:
+                first_name:
+                  type: string
+                last_name:
+                  type: string
+    delete:
+      summary: Удалить автора
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Автор удален
+        '404':
+          description: Автор не найден
+servers:
+- url: http://localhost:3000/
+components:
+  schemas:
+    author:
+      type: object
+      required:
+      - id
+      - first_name
+      - last_name
+      properties:
+        id:
+          type: integer
+        first_name:
+          type: string
+        last_name:
+          type: string
+    bad_request_error:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          type: string
+    unprocessable_entity_error:
+      type: object
+      required:
+      - errors
+      properties:
+        errors:
+          type: object
+          properties:
+            attr1:
+              type: array
+              items:
+                type: string
+            attr2:
+              type: array
+              items:
+                type: string
