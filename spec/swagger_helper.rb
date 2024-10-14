@@ -43,6 +43,15 @@ RSpec.configure do |config|
               author: { '$ref' => '#/components/schemas/author' }
             }
           },
+          competency: {
+            type: :object,
+            required: %i[id name course],
+            properties: {
+              id: { type: :integer },
+              name: { type: :string },
+              course: { '$ref' => '#/components/schemas/course' }
+            }
+          },
           bad_request_error: {
             type: :object,
             required: %i[error],
