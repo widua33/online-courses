@@ -7,6 +7,8 @@ paths:
   "/api/v1/authors":
     get:
       summary: Список авторов
+      tags:
+      - Авторы
       responses:
         '200':
           description: Список авторов получен
@@ -21,6 +23,8 @@ paths:
                       "$ref": "#/components/schemas/author"
     post:
       summary: Создать автора
+      tags:
+      - Авторы
       parameters: []
       responses:
         '201':
@@ -64,6 +68,8 @@ paths:
         type: string
     get:
       summary: Получить автора
+      tags:
+      - Авторы
       responses:
         '200':
           description: Автор получен
@@ -75,6 +81,8 @@ paths:
           description: Автор не найден
     put:
       summary: Обновить автора
+      tags:
+      - Авторы
       parameters: []
       responses:
         '200':
@@ -112,6 +120,8 @@ paths:
                   type: string
     delete:
       summary: Удалить автора
+      tags:
+      - Авторы
       parameters:
       - name: id
         in: path
@@ -124,6 +134,136 @@ paths:
           description: Автор удален
         '404':
           description: Автор не найден
+  "/api/v1/courses":
+    get:
+      summary: Список курсов
+      tags:
+      - Курсы
+      responses:
+        '200':
+          description: Список курсов получен
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  courses:
+                    type: array
+                    items:
+                      "$ref": "#/components/schemas/course"
+    post:
+      summary: Создать курс
+      tags:
+      - Курсы
+      parameters: []
+      responses:
+        '201':
+          description: Курс создан
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/course"
+        '400':
+          description: Cервер не может обработать запрос
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/bad_request_error"
+        '422':
+          description: При обработке данных произошла ошибка
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/unprocessable_entity_error"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - name
+              - author_id
+              properties:
+                name:
+                  type: string
+                author_id:
+                  type: integer
+  "/api/v1/courses/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: id
+      required: true
+      schema:
+        type: string
+    get:
+      summary: Получить курс
+      tags:
+      - Курсы
+      responses:
+        '200':
+          description: Курс получен
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/course"
+        '404':
+          description: Курс не найден
+    put:
+      summary: Обновить курс
+      tags:
+      - Курсы
+      parameters: []
+      responses:
+        '200':
+          description: Курс обновлен
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/course"
+        '400':
+          description: Cервер не может обработать запрос
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/bad_request_error"
+        '404':
+          description: Курс не найден
+        '422':
+          description: При обработке данных произошла ошибка
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/unprocessable_entity_error"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - name
+              - author_id
+              properties:
+                name:
+                  type: string
+                author_id:
+                  type: integer
+    delete:
+      summary: Удалить курс
+      tags:
+      - Курсы
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Курс удален
+        '404':
+          description: Курс не найден
 servers:
 - url: http://localhost:3000/
 components:
@@ -141,6 +281,19 @@ components:
           type: string
         last_name:
           type: string
+    course:
+      type: object
+      required:
+      - id
+      - name
+      - author
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        author:
+          "$ref": "#/components/schemas/author"
     bad_request_error:
       type: object
       required:

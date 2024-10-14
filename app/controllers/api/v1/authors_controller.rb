@@ -35,7 +35,11 @@ class Api::V1::AuthorsController < ApplicationController
 
   # DELETE /authors/1
   def destroy
-    @author.destroy
+    result = Authors::Destroy.new(author: @author).call
+
+    return unless result.failure?
+
+    render json: { errors: result.failure }, status: :unprocessable_entity
   end
 
   private

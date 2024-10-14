@@ -15,6 +15,6 @@ module ErrorsHandler
   end
 
   def parameter_missing(error)
-    render json: { error: I18n.t('parameter_missing', param: error.param) }, status: :bad_request
+    render json: { error: I18n.t('errors.parameter_missing', param: error.param) }, status: :bad_request
   end
 end

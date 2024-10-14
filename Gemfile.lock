@@ -83,6 +83,13 @@ GEM
       irb (~> 1.10)
       reline (>= 0.3.8)
     diff-lcs (1.5.1)
+    dry-core (1.0.1)
+      concurrent-ruby (~> 1.0)
+      zeitwerk (~> 2.6)
+    dry-monads (1.6.0)
+      concurrent-ruby (~> 1.0)
+      dry-core (~> 1.0, < 2)
+      zeitwerk (~> 2.6)
     erubi (1.13.0)
     factory_bot (6.5.0)
       activesupport (>= 5.0.0)
@@ -223,18 +230,19 @@ PLATFORMS
 
 DEPENDENCIES
   bootsnap
-  database_cleaner-active_record
+  database_cleaner-active_record (~> 2.2)
   debug
-  factory_bot_rails
-  faker
+  dry-monads (~> 1.6)
+  factory_bot_rails (~> 6.4, >= 6.4.3)
+  faker (~> 3.4, >= 3.4.2)
   multi_json (~> 1.15)
-  oj_serializers
+  oj_serializers (~> 2.0, >= 2.0.3)
   pg (~> 1.5, >= 1.5.8)
   puma (~> 5.0)
   rails (~> 7.0.8, >= 7.0.8.4)
   rspec-rails (~> 7.0.0)
-  rswag
-  rswag-specs
+  rswag (~> 2.15)
+  rswag-specs (~> 2.15)
   tzinfo-data
 
 RUBY VERSION

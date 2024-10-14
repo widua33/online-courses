@@ -34,6 +34,15 @@ RSpec.configure do |config|
               last_name: { type: :string }
             }
           },
+          course: {
+            type: :object,
+            required: %i[id name author],
+            properties: {
+              id: { type: :integer },
+              name: { type: :string },
+              author: { '$ref' => '#/components/schemas/author' }
+            }
+          },
           bad_request_error: {
             type: :object,
             required: %i[error],

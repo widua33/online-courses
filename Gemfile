@@ -36,20 +36,34 @@ gem 'bootsnap', require: false
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 # gem "rack-cors"
 
-# OpenApi 3.0 and Swagger 2.0 compatible!
+# Generate beautiful API documentation, including a UI to explore and test operations,
+# directly from your rspec integration tests. OpenAPI 2 and 3 supported.
 gem 'multi_json', '~> 1.15'
-gem 'rswag'
+gem 'rswag', '~> 2.15'
 
 # Faster JSON serializers for Ruby, built on top of the powerful oj library.
-gem 'oj_serializers'
+gem 'oj_serializers', '~> 2.0', '>= 2.0.3'
+
+# Common monads for Ruby
+gem 'dry-monads', '~> 1.6'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem 'debug', platforms: %i[mri mingw x64_mingw]
-  gem 'factory_bot_rails'
-  gem 'faker'
+
+  # Factory_bot provides a framework and DSL for defining and using factories - less error-prone, more explicit,
+  # and all-around easier to work with than fixtures.
+  gem 'factory_bot_rails', '~> 6.4', '>= 6.4.3'
+
+  # Faker, a port of Data::Faker from Perl, is used to easily generate fake data: names, addresses, phone numbers, etc.
+  gem 'faker', '~> 3.4', '>= 3.4.2'
+
+  # BDD for Ruby. RSpec runner and example groups.
   gem 'rspec-rails', '~> 7.0.0'
-  gem 'rswag-specs'
+
+  # Simplify API integration testing with a succinct rspec DSL and generate OpenAPI specification files
+  # directly from your rspec tests.
+  gem 'rswag-specs', '~> 2.15'
 end
 
 group :development do
@@ -58,5 +72,6 @@ group :development do
 end
 
 group :test do
-  gem 'database_cleaner-active_record'
+  # Strategies for cleaning databases using ActiveRecord. Can be used to ensure a clean state for testing.
+  gem 'database_cleaner-active_record', '~> 2.2'
 end

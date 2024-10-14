@@ -1,7 +1,13 @@
 require 'swagger_helper'
 
 RSpec.describe 'api/v1/authors', type: :request do
-  author_parameter = {
+  shared_examples 'settings' do
+    tags 'Авторы'
+    consumes 'application/json'
+    produces 'application/json'
+  end
+
+  author_parameter_schema = {
     type: :object,
     required: %i[first_name last_name],
     properties: {
@@ -12,8 +18,7 @@ RSpec.describe 'api/v1/authors', type: :request do
 
   path '/api/v1/authors' do
     get('Список авторов') do
-      consumes 'application/json'
-      produces 'application/json'
+      include_examples 'settings'
 
       response(200, 'Список авторов получен') do
         schema(
@@ -31,10 +36,9 @@ RSpec.describe 'api/v1/authors', type: :request do
     end
 
     post('Создать автора') do
-      consumes 'application/json'
-      produces 'application/json'
+      include_examples 'settings'
 
-      parameter name: :author, in: :body, schema: author_parameter, required: false
+      parameter name: :author, in: :body, schema: author_parameter_schema, required: false
 
       response(201, 'Автор создан') do
         schema('$ref' => '#/components/schemas/author')
@@ -64,8 +68,7 @@ RSpec.describe 'api/v1/authors', type: :request do
     parameter name: 'id', in: :path, type: :string, description: 'id'
 
     get('Получить автора') do
-      consumes 'application/json'
-      produces 'application/json'
+      include_examples 'settings'
 
       response(200, 'Автор получен') do
         schema('$ref' => '#/components/schemas/author')
@@ -83,13 +86,11 @@ RSpec.describe 'api/v1/authors', type: :request do
     end
 
     put('Обновить автора') do
-      consumes 'application/json'
-      produces 'application/json'
+      include_examples 'settings'
 
-      parameter name: :author, in: :body, schema: author_parameter, required: false
+      parameter name: :author, in: :body, schema: author_parameter_schema, required: false
 
       let(:id) { FactoryBot.create(:author).id }
-      let(:author) { { first_name: 'John', last_name: 'Doe' } }
 
       response(200, 'Автор обновлен') do
         schema('$ref' => '#/components/schemas/author')
@@ -123,19 +124,26 @@ RSpec.describe 'api/v1/authors', type: :request do
     end
 
     delete('Удалить автора') do
-      consumes 'application/json'
-      produces 'application/json'
+      include_examples 'settings'
 
       parameter name: 'id', in: :path, type: :string, description: 'id'
 
+      let(:id) { FactoryBot.create(:author).id }
+
       response(204, 'Автор удален') do
-        let(:id) { FactoryBot.create(:author).id }
+        before { FactoryBot.create(:author) }
 
         run_test!
       end
 
       response(404, 'Автор не найден') do
         let(:id) { 123 }
+
+        run_test!
+      end
+
+      response(422, 'Не получилось удалить автора') do
+        schema('$ref' => '#/components/schemas/unprocessable_entity_error')
 
         run_test!
       end
